@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Judith Navó — Portfolio 3D</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <div id="loading">
+    <div class="ld-title">LOADING</div>
+    <div class="ld-sub">JUDITH NAVÓ MARTÍNEZ</div>
+    <div class="ld-bar-wrap"><div class="ld-bar-inner" id="load-bar"></div></div>
+    <div class="ld-pct" id="load-pct">0%</div>
+  </div>
+
+  <div id="canvas-container"></div>
+  <div id="hint">▶ CLICK ON THE MONITOR</div>
+  <div id="tooltip"></div>
+
+  <!-- MONITOR IFRAME OVERLAY -->
+  <div id="monitor-overlay">
+    <div id="monitor-frame-wrap">
+      <div class="mon-corner tl"></div>
+      <div class="mon-corner tr"></div>
+      <div class="mon-corner bl"></div>
+      <div class="mon-corner br"></div>
+      <div class="mon-scanlines"></div>
+      <div class="mon-topbar">
+        <span class="mon-title">JUDITH_NAVÓ.portfolio ─ [RUNNING]</span>
+        <button id="mon-close" onclick="closeMonitor()">✕</button>
+      </div>
+      <iframe
+        id="portfolio-iframe"
+        src="portfolioweb/portfolio.html"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+      ></iframe>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

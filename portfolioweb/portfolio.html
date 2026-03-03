@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Judith Navó — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500&display=swap"/>
+  <style>
+    /* ══════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════ */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --red:      #e60026;
+      --red-dk:   #8b0000;
+      --red-glow: rgba(230,0,38,.35);
+      --bg:       #0b0a0f;
+      --bg2:      #151217;
+      --bg3:      #1a171a;
+      --text:     #e4dcdc;
+      --text-dim: #c4b3b8;
+      --border:   #2a1b1f;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--red-dk); border-radius: 3px; }
+
+    /* ══════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════ */
+    header {
+      text-align: center;
+      padding: 0 2rem 3rem;
+      background:
+        linear-gradient(rgba(230,0,0,.28), var(--bg)),
+        url('src/fondo.jpg') center/cover no-repeat;
+      position: relative;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      background: rgba(11,10,15,.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #1a0a0e;
+    }
+    nav ul {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    nav a {
+      text-decoration: none;
+      color: #ccc;
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--red); }
+
+    .hero {
+      padding: 5rem 2rem 4rem;
+    }
+    .hero h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 20px var(--red), 0 0 60px rgba(230,0,38,.3);
+      letter-spacing: .04em;
+    }
+    .hero p {
+      color: #bbb;
+      margin: .8rem auto 0;
+      max-width: 520px;
+      font-size: .9rem;
+      letter-spacing: .05em;
+    }
+    .hero-line {
+      width: 60px; height: 3px;
+      background: var(--red);
+      box-shadow: 0 0 12px var(--red);
+      margin: 1.4rem auto 0;
+      border-radius: 2px;
+    }
+
+    /* ══════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════ */
+    main {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    section {
+      margin-bottom: 3.5rem;
+      background: var(--bg2);
+      padding: 2rem 2.2rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 24px rgba(230,0,38,.1);
+    }
+
+    section h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      padding-left: 12px;
+      border-left: 4px solid var(--red);
+      position: relative;
+    }
+
+    /* ══════════════════════════════════════
+       ABOUT
+    ══════════════════════════════════════ */
+    .about-content {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .about-content p {
+      flex: 1;
+      color: var(--text-dim);
+      min-width: 260px;
+      font-size: .92rem;
+      line-height: 1.75;
+    }
+    .about-img {
+      width: 160px; height: 160px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid var(--red-dk);
+      box-shadow: 0 0 20px var(--red-dk), 0 0 50px rgba(139,0,0,.4);
+      flex-shrink: 0;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .about-img:hover {
+      transform: scale(1.05) rotate(-2deg);
+      box-shadow: 0 0 30px var(--red), 0 0 60px rgba(230,0,38,.3);
+    }
+
+    /* ══════════════════════════════════════
+       SKILLS
+    ══════════════════════════════════════ */
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 16px;
+    }
+    .skill-card {
+      background: var(--bg3);
+      border: 1px solid #2a1b22;
+      border-radius: 12px;
+      padding: 1.2rem .8rem;
+      text-align: center;
+      cursor: default;
+      transition: transform .22s, background .22s, box-shadow .22s;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: .6rem;
+    }
+    .skill-card img {
+      width: 42px; height: 42px;
+      object-fit: contain;
+      filter: grayscale(80%) brightness(.85);
+      transition: filter .25s;
+    }
+    .skill-card p {
+      color: #ccc;
+      font-size: .72rem;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    .skill-card:hover {
+      transform: translateY(-5px);
+      background: #ffa0a0;
+      box-shadow: 0 0 20px var(--red-glow);
+    }
+    .skill-card:hover img { filter: none; }
+    .skill-card:hover p { color: #0b0a0f; }
+
+    /* ══════════════════════════════════════
+       PROJECTS
+    ══════════════════════════════════════ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .project-card {
+      background: var(--bg3);
+      border: 1px solid rgba(230,0,38,.12);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform .22s, box-shadow .22s, border-color .22s;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 22px rgba(230,0,38,.3);
+      border-color: var(--red);
+    }
+    .project-card img {
+      width: 100%; height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .project-info {
+      padding: 1.1rem 1.2rem 1.4rem;
+      flex: 1; display: flex; flex-direction: column;
+    }
+    .project-info h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+      line-height: 1.3;
+    }
+    .project-info p {
+      color: var(--text-dim);
+      font-size: .82rem;
+      line-height: 1.55;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+    .project-btn {
+      display: inline-block;
+      padding: 7px 16px;
+      background: var(--red-dk);
+      color: #fff;
+      font-size: .78rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 6px;
+      align-self: flex-start;
+      letter-spacing: .05em;
+      transition: background .2s, box-shadow .2s;
+    }
+    .project-btn:hover {
+      background: var(--red);
+      box-shadow: 0 0 14px var(--red-glow);
+    }
+
+    /* ══════════════════════════════════════
+       EXPERIENCE TIMELINE
+    ══════════════════════════════════════ */
+    .timeline { padding-left: 28px; position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 6px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--red), transparent);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px; top: 6px;
+      width: 10px; height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--red);
+    }
+    .timeline-content {
+      background: #111013;
+      padding: 1.1rem 1.3rem;
+      border-radius: 10px;
+      border: 1px solid rgba(230,0,38,.2);
+      box-shadow: 0 0 10px rgba(230,0,38,.08);
+    }
+    .timeline-content h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: #c44; margin-bottom: 3px;
+    }
+    .timeline-content h4 {
+      font-size: .78rem; color: #aaa;
+      margin-bottom: 6px; letter-spacing: .04em;
+    }
+    .timeline-content p { color: #ddd; font-size: .85rem; }
+
+    /* ══════════════════════════════════════
+       CONTACT
+    ══════════════════════════════════════ */
+    #contact { text-align: center; }
+    #contact h2 {
+      border-left: none;
+      padding-left: 0;
+      display: inline-block;
+    }
+    .contact-container {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-top: .5rem;
+    }
+    .contact-item {
+      background: var(--bg3);
+      border: 1px solid #2a1b22;
+      border-radius: 10px;
+      padding: 1rem 1.8rem;
+      text-decoration: none;
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+    .contact-item:hover {
+      background: var(--red);
+      transform: translateY(-4px);
+      box-shadow: 0 0 18px var(--red-glow);
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      color: #666;
+      letter-spacing: .1em;
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE (dentro del iframe)
+    ══════════════════════════════════════ */
+    @media(max-width: 600px) {
+      nav ul { gap: 1rem; }
+      nav a  { font-size: .75rem; }
+      .about-content { flex-direction: column; align-items: center; text-align: center; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .skills-container { grid-template-columns: repeat(3,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="hero">
+    <h1>I'm Judith Navó</h1>
+    <p>3D Artist · Animation · Games &amp; Interactive Experiences</p>
+    <div class="hero-line"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2>About</h2>
+    <div class="about-content">
+      <p>I am a 3D artist and visual creator with experience in modeling, lighting, and animation in Blender.
+         I like to take care of every detail of the creative process, from design to final presentation.
+         I enjoy working in a team and learning new techniques that help me continue to improve as a professional.</p>
+      <img src="src/about.jpg" alt="Judith Navó" class="about-img"/>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills-container">
+      <div class="skill-card"><img src="src/blender.png" alt="Blender"/><p>Blender</p></div>
+      <div class="skill-card"><img src="src/krita.png" alt="Krita"/><p>Krita</p></div>
+      <div class="skill-card"><img src="src/photoshop.png" alt="Photoshop"/><p>Photoshop</p></div>
+      <div class="skill-card"><img src="src/illustrator.png" alt="Illustrator"/><p>Illustrator</p></div>
+      <div class="skill-card"><img src="src/aftereffects.png" alt="After Effects"/><p>After Effects</p></div>
+      <div class="skill-card"><img src="src/premiere.png" alt="Premiere"/><p>Premiere</p></div>
+      <div class="skill-card"><img src="src/unity.png" alt="Unity"/><p>Unity</p></div>
+      <div class="skill-card"><img src="src/canva.png" alt="Canva"/><p>Canva</p></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <img src="src/twr.png" alt="The Wild Robot"/>
+        <div class="project-info">
+          <h3>The Wild Robot – 3D Modeling &amp; Texturing</h3>
+          <p>A 3D recreation of the protagonist robot from The Wild Robot. Full modeling,
+             texturing, and rendering process — carefully crafting shapes, materials, and details.</p>
+          <a href="#" class="project-btn">See More</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img src="src/nightroom.jpg" alt="Isometric Room"/>
+        <div class="project-info">
+          <h3>Isometric Room – Texturing &amp; Lighting</h3>
+          <p>An isometric room scene with night lighting. Focused on realistic materials
+             and mood through careful illumination.</p>
+          <a href="#" class="project-btn">See More</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img src="src/livingroom.jpg" alt="Living Room"/>
+        <div class="project-info">
+          <h3>Stylized Living Room – 3D Modeling &amp; Lighting</h3>
+          <p>A cozy, stylized dining room focused on color harmony and mood lighting.
+             Modeling, texturing, lighting, and rendering.</p>
+          <a href="#" class="project-btn">See More</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img src="src/ignirion.png" alt="Ignirion"/>
+        <div class="project-info">
+          <h3>Ignirion – 3D Creature Design, Texturing &amp; Rigging</h3>
+          <p>An original creature inspired by the Pokémon style. Fully modeled, textured, and rigged —
+             stylized forms, clean topology, expressive movement.</p>
+          <a href="#" class="project-btn">See More</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>Parking Attendant — UTE EAS Barcelona Airport</h3>
+          <h4>June 2025 – October 2025</h4>
+          <p>Customer service, access control, basic maintenance, and incident management.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>IT Technician — Escola Fluvià</h3>
+          <h4>May 2023 – December 2023</h4>
+          <p>Installed and configured hardware and software, diagnosed and resolved problems,
+             and produced technical documentation.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>Volunteering — Sede Adira BCN</h3>
+          <h4>May 2021 – Present</h4>
+          <p>Maintain shared human–cat environments, monitor well-being, ensure safety and cleanliness.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <div class="contact-container">
+      <a href="mailto:jnavomartinez@gmail.com" class="contact-item">Gmail</a>
+      <a href="https://www.artstation.com/jdxth" target="_blank" rel="noopener" class="contact-item">ArtStation</a>
+      <a href="https://www.linkedin.com/in/judith-nav%C3%B3-mart%C3%ADnez-73185b385/" target="_blank" rel="noopener" class="contact-item">LinkedIn</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2025 Judith Navó — 3D Artist</p>
+</footer>
+
+</body>
+</html>
