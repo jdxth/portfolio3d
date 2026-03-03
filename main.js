@@ -28,7 +28,7 @@ const CFG = {
 
   camStart:  { x: 4,     y: 4,    z: 4     },
   camLookAt: { x: -1.3,  y: 1.35, z: -0.4  },
-  zoomPos:   { x: -1.05, y: 1.46, z: 0.52  },
+  zoomPos:   { x: 0, y: 1.46, z: -0  },
   zoomLook:  { x: -1.55, y: 1.41, z: -0.47 },
 };
 
