@@ -87,6 +87,20 @@ const deskLight = new THREE.PointLight(0xffcc66, 0.7, 2.2);
 deskLight.position.set(-1.2, 1.65, 0.45);
 scene.add(deskLight);
 
+// Luz general más potente
+const ambientLight2 = new THREE.AmbientLight(0xffffff, 0.2);
+scene.add(ambientLight2);
+
+// Luz desde arriba (techo)
+const ceilingLight = new THREE.DirectionalLight(0xffffff, 0.5);
+ceilingLight.position.set(0, 5, 0);
+scene.add(ceilingLight);
+
+// Luz frontal para iluminar la habitación de frente
+const frontLight = new THREE.DirectionalLight(0xfff0e0, 0.4);
+frontLight.position.set(0, 2, 5);
+scene.add(frontLight);
+
 /* ── State ────────────────────────────────────────── */
 let screen1Mesh    = null;
 let screen2Mesh    = null;
@@ -372,6 +386,43 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+/* ── TOGGLE LUCES ─────────────────────────────────── */
+let lightsOn = true;
+
+function toggleLights() {
+  lightsOn = !lightsOn;
+
+  const btn   = document.getElementById('light-btn');
+  const icon  = document.getElementById('light-icon');
+  const label = document.getElementById('light-label');
+
+  // Todas las luces de la escena
+  const intensity = lightsOn ? 1 : 0;
+
+  gsap.to(keyLight,     { intensity: lightsOn ? 0.9 : 0, duration: 0.6 });
+  gsap.to(fillLight,    { intensity: lightsOn ? 0.3 : 0, duration: 0.6 });
+  gsap.to(deskLight,    { intensity: lightsOn ? 0.7 : 0, duration: 0.6 });
+  gsap.to(monitorGlow,  { intensity: lightsOn ? 0.5 : 0, duration: 0.6 });
+
+  // Ambient más suave para no dejar todo negro del todo
+  scene.traverse(child => {
+    if (child.isAmbientLight) {
+      gsap.to(child, { intensity: lightsOn ? 0.55 : 0.04, duration: 0.8 });
+    }
+    // Si añadiste más luces también las apaga
+    if (child.isDirectionalLight || child.isPointLight) {
+      if (child !== keyLight && child !== fillLight && child !== deskLight && child !== monitorGlow) {
+        gsap.to(child, { intensity: lightsOn ? child.userData.baseIntensity || 0.5 : 0, duration: 0.6 });
+      }
+    }
+  });
+
+  // UI
+  btn.classList.toggle('off', !lightsOn);
+  icon.textContent  = lightsOn ? '💡' : '🌑';
+  label.textContent = lightsOn ? 'LIGHTS ON' : 'LIGHTS OFF';
+}
 
 /* ── Init ─────────────────────────────────────────── */
 (function init() {
