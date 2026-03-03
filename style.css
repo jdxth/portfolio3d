@@ -46,17 +46,61 @@ html, body { width:100%; height:100%; overflow:hidden; background:#000; font-fam
 }
 @keyframes hint-blink { 55%{opacity:.1} }
 
-/* TOOLTIP */
+/* TOOLTIP MEJORADO */
 #tooltip {
-  position:fixed;
-  font-family:var(--vt); font-size:1rem; color:var(--green); text-shadow:var(--glow-sm);
-  background:rgba(0,4,0,.9); border:1px solid var(--green-dk);
-  padding:4px 14px; letter-spacing:.18em;
-  pointer-events:none; opacity:0; transition:opacity .15s;
-  z-index:60; white-space:nowrap; border-radius:2px;
-  transform:translate(-50%,-130%);
+  position: fixed;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--vt);
+  color: var(--green);
+  text-shadow: var(--glow-sm);
+  background: rgba(0, 6, 0, 0.92);
+  border: 1px solid var(--green-dk);
+  padding: 8px 18px 8px 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 60;
+  white-space: nowrap;
+  border-radius: 3px;
+  transform: translate(-50%, -140%);
+  box-shadow: 0 0 12px rgba(0,255,65,.15), inset 0 0 8px rgba(0,255,65,.03);
 }
-#tooltip.show { opacity:1; }
+#tooltip::before {
+  /* triángulo inferior */
+  content: '';
+  position: absolute;
+  bottom: -6px; left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--green-dk);
+}
+#tooltip.show { opacity: 1; }
+
+.tt-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.tt-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.tt-label {
+  font-size: 1.05rem;
+  letter-spacing: .18em;
+  color: var(--green);
+  text-shadow: var(--glow-sm);
+}
+.tt-sub {
+  font-size: .72rem;
+  letter-spacing: .1em;
+  color: var(--green-dim);
+  font-family: var(--mono);
+}
 
 /* MONITOR IFRAME OVERLAY */
 #monitor-overlay {

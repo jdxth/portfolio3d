@@ -5,57 +5,74 @@ const CFG = {
 
   // Meshes del monitor principal (iframe)
   screen1: 'Pantalla01',
-  // Pantalla02 la dejamos apagada
 
   // Meshes de links directos
   links: {
     artstation: 'artstation',
-    linkedin:   'linkedin',
-    gmail:      'gmail',
+    linkedin: 'linkedin',
+    gmail: 'gmail',
   },
 
   // URLs
   urls: {
     artstation: 'https://www.artstation.com/jdxth',
-    linkedin:   'https://www.linkedin.com/in/judith-nav%C3%B3-mart%C3%ADnez-73185b385/',
-    gmail:      'mailto:jnavomartinez@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/judith-nav%C3%B3-mart%C3%ADnez-73185b385/',
+    gmail: 'mailto:jnavomartinez@gmail.com',
   },
 
   // Tooltips que aparecen al hacer hover
   tooltips: {
-    Pantalla01:  '[ OPEN PORTFOLIO ]',
-    artstation:  '[ ARTSTATION ]',
-    linkedin:    '[ LINKEDIN ]',
-    gmail:       '[ EMAIL ]',
+    Pantalla01: {
+      icon: '◈',
+      label: '[ OPEN PORTFOLIO ]',
+      sub: 'judith-navo.portfolio'
+    },
+    artstation: {
+      icon: '◎',
+      label: '[ OPEN ARTSTATION ]',
+      sub: 'artstation.com/jdxth'
+    },
+    linkedin: {
+      icon: '▣',
+      label: '[ OPEN LINKEDIN ]',
+      sub: 'linkedin.com/in/judith-navó'
+    },
+    gmail: {
+      icon: '◈',
+      label: '[ SEND EMAIL ]',
+      sub: 'jnavomartinez@gmail.com'
+    },
   },
 
   // Cámara inicial — ajusta si el encuadre no es perfecto
-  camStart:  { x: 4,  y: 4, z: 4  },
-  camLookAt: { x: -1.3,  y: 1.35, z: -0.4 },
+  camStart: { x: 4, y: 4, z: 4 },
+  camLookAt: { x: -1.3, y: 1.35, z: -0.4 },
 
   // Posición de zoom hacia Pantalla01
   // (monitores en aprox x:-1.55, y:1.41, z:-0.47)
-  zoomPos:  { x: -1.05, y: 1.46, z: 0.52 },
+  zoomPos: { x: -1.05, y: 1.46, z: 0.52 },
   zoomLook: { x: -1.55, y: 1.41, z: -0.47 },
 };
 
 /* ── DOM ──────────────────────────────────────────── */
-const canvasWrap  = document.getElementById('canvas-container');
-const loadingEl   = document.getElementById('loading');
-const loadBar     = document.getElementById('load-bar');
-const loadPct     = document.getElementById('load-pct');
-const hintEl      = document.getElementById('hint');
-const tooltipEl   = document.getElementById('tooltip');
-const monOverlay  = document.getElementById('monitor-overlay');
+const canvasWrap = document.getElementById('canvas-container');
+const loadingEl = document.getElementById('loading');
+const loadBar = document.getElementById('load-bar');
+const loadPct = document.getElementById('load-pct');
+const hintEl = document.getElementById('hint');
+const tooltipEl = document.getElementById('tooltip');
+const monOverlay = document.getElementById('monitor-overlay');
+const ttIcon = document.querySelector('.tt-icon');
+const ttText = document.querySelector('.tt-text');
 
 /* ── Renderer ─────────────────────────────────────── */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
-renderer.outputEncoding    = THREE.sRGBEncoding;
-renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.1;
 canvasWrap.appendChild(renderer.domElement);
 
@@ -95,19 +112,19 @@ deskLight.position.set(-1.2, 1.65, 0.45);
 scene.add(deskLight);
 
 /* ── State ────────────────────────────────────────── */
-let screen1Mesh  = null;           // Pantalla01
-let screen2Mesh  = null;           // Pantalla02 (apagada)
+let screen1Mesh = null;           // Pantalla01
+let screen2Mesh = null;           // Pantalla02 (apagada)
 const linkMeshes = {};             // { artstation: mesh, linkedin: mesh, gmail: mesh }
 const allInteractable = [];        // todos los meshes con raycasting
 
-let isZoomed    = false;
+let isZoomed = false;
 let isAnimating = false;
 let hoveredMesh = null;
 
 const savedCamPos = new THREE.Vector3();
-const mouse    = new THREE.Vector2(-999, -999);
+const mouse = new THREE.Vector2(-999, -999);
 const raycaster = new THREE.Raycaster();
-const clock    = new THREE.Clock();
+const clock = new THREE.Clock();
 
 /* ════════════════════════════════════════════════════
    LOAD GLB
@@ -118,47 +135,63 @@ function loadModel() {
 }
 
 function onLoaded(gltf) {
-  // Debug: todos los meshes
-  console.group('📦 Meshes en el modelo:');
-  gltf.scene.traverse(c => { if (c.isMesh) console.log(c.name); });
-  console.groupEnd();
+
+  // Primero imprimimos TODOS los objetos (no solo meshes)
+  gltf.scene.traverse(child => {
+    console.log(child.type + ' → ' + child.name);
+  });
 
   gltf.scene.traverse(child => {
-    if (!child.isMesh) return;
-    child.castShadow = child.receiveShadow = true;
+    child.castShadow = true;
+    child.receiveShadow = true;
 
     const name = child.name;
 
-    // ── Pantalla01: monitor principal ──
+    // Pantalla01
     if (name === CFG.screen1) {
       screen1Mesh = child;
-      applyScreenMaterial(child, 0x003a00, 0.6);   // verde encendido
+      if (child.isMesh) applyScreenMaterial(child, 0x003a00, 0.6);
       allInteractable.push(child);
-      console.log('✅ Pantalla01:', name);
+      console.log('✅ Pantalla01 añadida');
     }
 
-    // ── Pantalla02: apagada ──
+    // Pantalla02
     if (name === 'Pantalla02') {
       screen2Mesh = child;
-      applyScreenMaterial(child, 0x000000, 0.0);   // negra / apagada
-      // NO se añade a allInteractable
-      console.log('📴 Pantalla02 (apagada):', name);
+      if (child.isMesh) applyScreenMaterial(child, 0x000000, 0.0);
+      console.log('📴 Pantalla02 apagada');
     }
 
-    // ── Meshes de links ──
+    // Links — busca por nombre en cualquier tipo de objeto
     const linkKey = Object.entries(CFG.links).find(([, v]) => v === name)?.[0];
     if (linkKey) {
+      console.log('✅ LINK encontrado:', linkKey, '→ tipo:', child.type, '→ nombre:', name);
       linkMeshes[linkKey] = child;
-      allInteractable.push(child);
-      // Pequeño glow para que destaquen
-      if (child.material) {
-        child.material = child.material.clone();
-        child.material.emissive = new THREE.Color(0x002200);
-        child.material.emissiveIntensity = 0.3;
+
+      // Añadimos el objeto Y todos sus hijos mesh al raycaster
+      child.traverse(subchild => {
+        if (subchild.isMesh) {
+          allInteractable.push(subchild);
+          subchild.userData.linkKey = linkKey; // guardamos el link en el hijo
+          if (subchild.material) {
+            subchild.material = subchild.material.clone();
+            subchild.material.emissive = new THREE.Color(0x002200);
+            subchild.material.emissiveIntensity = 0.3;
+          }
+          console.log('  → submesh añadido:', subchild.name);
+        }
+      });
+
+      // Si el propio objeto es mesh también lo añadimos
+      if (child.isMesh) {
+        allInteractable.push(child);
+        child.userData.linkKey = linkKey;
       }
-      console.log(`✅ Link mesh "${linkKey}":`, name);
     }
   });
+
+  console.log('🎯 allInteractable total:', allInteractable.length);
+  console.log('🔗 linkMeshes:', Object.keys(linkMeshes));
 
   scene.add(gltf.scene);
   finishLoading();
@@ -188,12 +221,12 @@ function finishLoading() {
    INPUT
 ════════════════════════════════════════════════════ */
 window.addEventListener('mousemove', e => {
-  mouse.x =  (e.clientX / window.innerWidth)  * 2 - 1;
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
   // Mueve el tooltip con el cursor
   tooltipEl.style.left = e.clientX + 'px';
-  tooltipEl.style.top  = e.clientY + 'px';
+  tooltipEl.style.top = e.clientY + 'px';
 });
 
 window.addEventListener('click', onSceneClick);
@@ -211,16 +244,21 @@ function onSceneClick() {
   const mesh = hits[0].object;
   const name = mesh.name;
 
+  console.log('CLICK en:', name, '| userData:', mesh.userData);
+
   // Pantalla01 → zoom + iframe
   if (name === CFG.screen1 && !isZoomed) {
     zoomToMonitor();
     return;
   }
 
-  // Links → window.open / mailto
-  const linkKey = Object.entries(CFG.links).find(([, v]) => v === name)?.[0];
+  // Busca linkKey primero en userData (submesh), luego por nombre directo
+  const linkKey = mesh.userData.linkKey
+    || Object.entries(CFG.links).find(([, v]) => v === name)?.[0];
+
   if (linkKey) {
     const url = CFG.urls[linkKey];
+    console.log('Abriendo:', url);
     if (url.startsWith('mailto:')) window.location.href = url;
     else window.open(url, '_blank', 'noopener,noreferrer');
   }
@@ -228,7 +266,7 @@ function onSceneClick() {
 
 /* ── Hover ────────────────────────────────────────── */
 function updateHover() {
-  if (isZoomed) { clearHover(); return; }
+  if (isZoomed || !allInteractable.length) { clearHover(); return; }
 
   raycaster.setFromCamera(mouse, camera);
   const hits = raycaster.intersectObjects(allInteractable, true);
@@ -236,17 +274,26 @@ function updateHover() {
   if (hits.length > 0) {
     const mesh = hits[0].object;
     const name = mesh.name;
-    const tip  = CFG.tooltips[name] || '[ OPEN ]';
+    const tip  = CFG.tooltips[name];
 
     if (hoveredMesh !== mesh) {
       hoveredMesh = mesh;
-      tooltipEl.textContent = tip;
+
+      // Rellena el tooltip
+      if (tip) {
+        ttIcon.textContent = tip.icon;
+        ttText.innerHTML = `
+          <span class="tt-label">${tip.label}</span>
+          <span class="tt-sub">${tip.sub}</span>
+        `;
+      }
+
       tooltipEl.classList.add('show');
       document.body.style.cursor = 'pointer';
 
-      // Highlight sutil
+      // Highlight emissive
       if (mesh.material && mesh.material.emissiveIntensity !== undefined) {
-        gsap.to(mesh.material, { emissiveIntensity: 0.7, duration: 0.2 });
+        gsap.to(mesh.material, { emissiveIntensity: 0.75, duration: 0.2 });
       }
     }
   } else {
@@ -313,7 +360,7 @@ function zoomOut() {
 }
 
 /* ── Overlay helpers ──────────────────────────────── */
-function openMonitor()  { monOverlay.classList.add('active'); }
+function openMonitor() { monOverlay.classList.add('active'); }
 window.closeMonitor = function () { monOverlay.classList.remove('active'); zoomOut(); };
 
 /* ════════════════════════════════════════════════════
@@ -339,7 +386,7 @@ function idleSway(t) {
 function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
-  const t  = clock.getElapsedTime();
+  const t = clock.getElapsedTime();
   idleSway(t);
   updateHover();
   pulseGlow(dt);
