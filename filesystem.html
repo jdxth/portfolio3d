@@ -56,18 +56,9 @@
     }
 
     @keyframes flicker {
-      33% {
-        opacity: .97
-      }
-
-      66% {
-        opacity: .99
-      }
-
-      0%,
-      100% {
-        opacity: 1
-      }
+      33% { opacity: .97 }
+      66% { opacity: .99 }
+      0%, 100% { opacity: 1 }
     }
 
     /* TOPBAR */
@@ -194,34 +185,15 @@
       scrollbar-color: var(--green-dk) transparent;
     }
 
-    .os-content::-webkit-scrollbar {
-      width: 5px;
-    }
+    .os-content::-webkit-scrollbar { width: 5px; }
+    .os-content::-webkit-scrollbar-thumb { background: var(--green-dk); border-radius: 2px; }
 
-    .os-content::-webkit-scrollbar-thumb {
-      background: var(--green-dk);
-      border-radius: 2px;
-    }
-
-    .panel {
-      display: none;
-      animation: panel-in .25s ease both;
-    }
-
-    .panel.active {
-      display: block;
-    }
+    .panel { display: none; animation: panel-in .25s ease both; }
+    .panel.active { display: block; }
 
     @keyframes panel-in {
-      from {
-        opacity: 0;
-        transform: translateY(6px)
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
+      from { opacity: 0; transform: translateY(6px) }
+      to { opacity: 1; transform: translateY(0) }
     }
 
     .panel-header {
@@ -241,9 +213,7 @@
       letter-spacing: .1em;
     }
 
-    .ph-icon {
-      font-size: 1.5rem;
-    }
+    .ph-icon { font-size: 1.5rem; }
 
     /* DESKTOP */
     .desktop-grid {
@@ -272,10 +242,7 @@
       border-color: var(--green-dk);
     }
 
-    .di-emoji {
-      font-size: 1.8rem;
-      line-height: 1;
-    }
+    .di-emoji { font-size: 1.8rem; line-height: 1; }
 
     .di-label {
       font-size: .62rem;
@@ -309,9 +276,7 @@
       text-align: center;
     }
 
-    .cf-icon {
-      font-size: 2.8rem;
-    }
+    .cf-icon { font-size: 2.8rem; }
 
     .cv-open-btn {
       display: inline-flex;
@@ -360,41 +325,13 @@
       border-color: var(--green);
     }
 
-    .sk-name {
-      font-size: .78rem;
-      color: var(--green);
-      letter-spacing: .08em;
-    }
-
-    .sk-bar-wrap {
-      height: 3px;
-      background: #001500;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .sk-bar {
-      height: 100%;
-      background: var(--green);
-      box-shadow: var(--glow-sm);
-      border-radius: 2px;
-      width: 0%;
-      transition: width 1s ease .1s;
-    }
-
-    .sk-level {
-      font-size: .58rem;
-      color: var(--green-dim);
-      letter-spacing: .1em;
-      text-align: right;
-    }
+    .sk-name { font-size: .78rem; color: var(--green); letter-spacing: .08em; }
+    .sk-bar-wrap { height: 3px; background: #001500; border-radius: 2px; overflow: hidden; }
+    .sk-bar { height: 100%; background: var(--green); box-shadow: var(--glow-sm); border-radius: 2px; width: 0%; transition: width 1s ease .1s; }
+    .sk-level { font-size: .58rem; color: var(--green-dim); letter-spacing: .1em; text-align: right; }
 
     /* ABOUT */
-    .about-crt {
-      display: flex;
-      gap: 26px;
-      flex-wrap: wrap;
-    }
+    .about-crt { display: flex; gap: 26px; flex-wrap: wrap; }
 
     .about-photo-wrap {
       flex-shrink: 0;
@@ -415,9 +352,7 @@
       transition: filter .3s;
     }
 
-    .about-photo:hover {
-      filter: saturate(1) brightness(1);
-    }
+    .about-photo:hover { filter: saturate(1) brightness(1); }
 
     .about-photo-label {
       font-family: var(--vt);
@@ -426,10 +361,7 @@
       letter-spacing: .15em;
     }
 
-    .about-text {
-      flex: 1;
-      min-width: 200px;
-    }
+    .about-text { flex: 1; min-width: 200px; }
 
     .about-text p {
       font-size: .8rem;
@@ -439,12 +371,7 @@
       letter-spacing: .03em;
     }
 
-    .about-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
 
     .tag {
       padding: 2px 9px;
@@ -456,12 +383,7 @@
       background: rgba(0, 255, 65, .03);
     }
 
-    .prompt {
-      font-size: .75rem;
-      color: var(--green-dim);
-      letter-spacing: .05em;
-      margin-top: 14px;
-    }
+    .prompt { font-size: .75rem; color: var(--green-dim); letter-spacing: .05em; margin-top: 14px; }
 
     .cursor {
       display: inline-block;
@@ -472,11 +394,7 @@
       animation: cur-blink .8s step-end infinite;
     }
 
-    @keyframes cur-blink {
-      50% {
-        opacity: 0
-      }
-    }
+    @keyframes cur-blink { 50% { opacity: 0 } }
 
     /* STATUSBAR */
     .os-statusbar {
@@ -490,11 +408,7 @@
       flex-shrink: 0;
     }
 
-    .sb-item {
-      font-size: .58rem;
-      color: var(--green-dim);
-      letter-spacing: .12em;
-    }
+    .sb-item { font-size: .58rem; color: var(--green-dim); letter-spacing: .12em; }
 
     .sb-dot {
       display: inline-block;
@@ -508,15 +422,8 @@
     }
 
     @keyframes dot-pulse {
-
-      0%,
-      100% {
-        opacity: 1
-      }
-
-      50% {
-        opacity: .3
-      }
+      0%, 100% { opacity: 1 }
+      50% { opacity: .3 }
     }
   </style>
 </head>
@@ -531,16 +438,12 @@
   <div class="os-body">
     <div class="os-sidebar">
       <div class="sidebar-label">EXPLORADOR</div>
-      <div class="folder-item active" onclick="showPanel('home')" id="tab-home"><span
-          class="folder-icon">🖥</span><span>Inicio</span></div>
-      <div class="folder-item" onclick="showPanel('cv')" id="tab-cv"><span class="folder-icon">📄</span><span>CV</span>
-      </div>
-      <div class="folder-item" onclick="showPanel('skills')" id="tab-skills"><span
-          class="folder-icon">⚙</span><span>Skills</span></div>
-      <div class="folder-item" onclick="showPanel('about')" id="tab-about"><span
-          class="folder-icon">👤</span><span>Sobre mí</span></div>
+      <div class="folder-item active" onclick="showPanel('home')" id="tab-home"><span class="folder-icon">🖥</span><span>Inicio</span></div>
+      <div class="folder-item" onclick="showPanel('cv')" id="tab-cv"><span class="folder-icon">📄</span><span>CV</span></div>
+      <div class="folder-item" onclick="showPanel('skills')" id="tab-skills"><span class="folder-icon">⚙</span><span>Skills</span></div>
+      <div class="folder-item" onclick="showPanel('about')" id="tab-about"><span class="folder-icon">👤</span><span>Sobre mí</span></div>
       <div class="sidebar-divider"></div>
-      <a class="portfolio-btn" href="./portfolio.html" target="_parent">
+      <a class="portfolio-btn" href="./portfolioweb/portfolio.html" target="_parent">
         <span>◈</span><span>Portfolio Web →</span>
       </a>
     </div>
@@ -553,28 +456,27 @@
           <h2>ESCRITORIO</h2>
         </div>
         <div class="desktop-grid">
-          <div class="desktop-icon" ondblclick="showPanel('cv')">
+          <div class="desktop-icon" onclick="showPanel('cv')">
             <div class="di-emoji">📄</div>
-            <div class="di-label">CV.pdf</div>
+            <div class="di-label">CV.png</div>
           </div>
-          <div class="desktop-icon" ondblclick="showPanel('skills')">
+          <div class="desktop-icon" onclick="showPanel('skills')">
             <div class="di-emoji">⚙</div>
             <div class="di-label">Skills</div>
           </div>
-          <div class="desktop-icon" ondblclick="showPanel('about')">
+          <div class="desktop-icon" onclick="showPanel('about')">
             <div class="di-emoji">👤</div>
             <div class="di-label">Sobre mí</div>
           </div>
-          <div class="desktop-icon" ondblclick="window.open('https://www.artstation.com/jdxth','_blank')">
+          <div class="desktop-icon" onclick="window.open('https://www.artstation.com/jdxth','_blank')">
             <div class="di-emoji">◎</div>
             <div class="di-label">ArtStation</div>
           </div>
-          <div class="desktop-icon"
-            ondblclick="window.open('https://www.linkedin.com/in/judith-nav%C3%B3-mart%C3%ADnez-73185b385/','_blank')">
+          <div class="desktop-icon" onclick="window.open('https://www.linkedin.com/in/judith-nav%C3%B3-mart%C3%ADnez-73185b385/','_blank')">
             <div class="di-emoji">▣</div>
             <div class="di-label">LinkedIn</div>
           </div>
-          <div class="desktop-icon" ondblclick="window.location.href='mailto:jnavomartinez@gmail.com'">
+          <div class="desktop-icon" onclick="window.location.href='mailto:jnavomartinez@gmail.com'">
             <div class="di-emoji">✉</div>
             <div class="di-label">Gmail</div>
           </div>
@@ -589,13 +491,13 @@
         </div>
         <div style="text-align:center">
           <img src="./cv.png" alt="CV Judith Navó" style="
-        max-width:100%;
-        max-height:calc(100vh - 160px);
-        object-fit:contain;
-        border:1px solid var(--green-dk);
-        border-radius:3px;
-        box-shadow:0 0 20px rgba(0,255,65,.1);
-      " />
+            max-width:100%;
+            max-height:calc(100vh - 160px);
+            object-fit:contain;
+            border:1px solid var(--green-dk);
+            border-radius:3px;
+            box-shadow:0 0 20px rgba(0,255,65,.1);
+          " />
         </div>
       </div>
 
@@ -654,14 +556,14 @@
 
     // Skills
     const SKILLS = [
-      { name: 'Blender', level: 85, label: 'AVANZADO' },
-      { name: 'Krita', level: 70, label: 'INTERMEDIO' },
-      { name: 'Photoshop', level: 65, label: 'INTERMEDIO' },
-      { name: 'Illustrator', level: 60, label: 'INTERMEDIO' },
-      { name: 'After Effects', level: 55, label: 'BÁSICO+' },
-      { name: 'Premiere', level: 60, label: 'INTERMEDIO' },
-      { name: 'Unity', level: 50, label: 'BÁSICO' },
-      { name: 'Canva', level: 80, label: 'AVANZADO' },
+      { name: 'Blender',       level: 85, label: 'AVANZADO'   },
+      { name: 'Krita',         level: 70, label: 'INTERMEDIO' },
+      { name: 'Photoshop',     level: 65, label: 'INTERMEDIO' },
+      { name: 'Illustrator',   level: 60, label: 'INTERMEDIO' },
+      { name: 'After Effects', level: 55, label: 'BÁSICO+'    },
+      { name: 'Premiere',      level: 60, label: 'INTERMEDIO' },
+      { name: 'Unity',         level: 50, label: 'BÁSICO'     },
+      { name: 'Canva',         level: 80, label: 'AVANZADO'   },
     ];
     document.getElementById('skills-grid').innerHTML = SKILLS.map(s =>
       `<div class="skill-row">
@@ -672,7 +574,12 @@
     ).join('');
 
     // Paths
-    const PATHS = { home: 'C:\\JNAVO\\INICIO', cv: 'C:\\JNAVO\\CV', skills: 'C:\\JNAVO\\SKILLS', about: 'C:\\JNAVO\\SOBRE_MI' };
+    const PATHS = {
+      home:   'C:\\JNAVO\\INICIO',
+      cv:     'C:\\JNAVO\\CV',
+      skills: 'C:\\JNAVO\\SKILLS',
+      about:  'C:\\JNAVO\\SOBRE_MI'
+    };
 
     function showPanel(id) {
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -687,8 +594,6 @@
         }, 80);
       }
     }
-
-
   </script>
 </body>
 
