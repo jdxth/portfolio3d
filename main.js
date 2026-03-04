@@ -4,7 +4,7 @@
 ════════════════════════════════════════════════════════ */
 
 const CFG = {
-  modelPath: './portfolio3d.glb',
+  modelPath: './models/portfolio3d.glb',
   screen1: 'Pantalla01',
 
   links: {
