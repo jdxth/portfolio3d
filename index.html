@@ -10,6 +10,7 @@
 
 <body>
 
+  <!-- LOADING -->
   <div id="loading">
     <div class="ld-title">LOADING</div>
     <div class="ld-sub">JUDITH NAVÓ MARTÍNEZ</div>
@@ -19,20 +20,25 @@
     <div class="ld-pct" id="load-pct">0%</div>
   </div>
 
+  <!-- CANVAS -->
   <div id="canvas-container"></div>
+
+  <!-- HINT -->
   <div id="hint">▶ CLICK ON THE MONITOR</div>
+
+  <!-- TOOLTIP -->
   <div id="tooltip">
     <div class="tt-icon"></div>
     <div class="tt-text"></div>
   </div>
 
   <!-- BOTÓN LUZ -->
-<div id="light-btn" onclick="toggleLights()">
-  <span id="light-icon">💡</span>
-  <span id="light-label">LIGHTS ON</span>
-</div>
+  <div id="light-btn" onclick="toggleLights()">
+    <span id="light-icon">💡</span>
+    <span id="light-label">LIGHTS ON</span>
+  </div>
 
-  <!-- MONITOR IFRAME OVERLAY -->
+  <!-- MONITOR OVERLAY — Pantalla01 (portfolio web) -->
   <div id="monitor-overlay">
     <div id="monitor-frame-wrap">
       <div class="mon-corner tl"></div>
@@ -49,9 +55,26 @@
     </div>
   </div>
 
+  <!-- FILESYSTEM OVERLAY — Pantalla02 (JNAVO_OS) -->
+  <div id="filesystem-overlay">
+    <div id="filesystem-frame-wrap">
+      <div class="mon-corner tl"></div>
+      <div class="mon-corner tr"></div>
+      <div class="mon-corner bl"></div>
+      <div class="mon-corner br"></div>
+      <div class="mon-scanlines"></div>
+      <div class="mon-topbar">
+        <span class="mon-title">JNAVO_OS v1.0 ─ [PANTALLA 02]</span>
+        <button id="fs-close" onclick="closeFilesystem()">✕</button>
+      </div>
+      <iframe id="filesystem-iframe" src="filesystem.html"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="main.js"></script>
-</body>
 
+</body>
 </html>

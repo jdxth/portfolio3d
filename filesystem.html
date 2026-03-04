@@ -1,147 +1,526 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JNAVO_OS</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     :root {
-      --green:#00ff41; --green-dim:#00882a; --green-dk:#003b0f;
-      --green-bg:#020d02; --glow:0 0 6px #00ff41,0 0 16px rgba(0,255,65,.4);
-      --glow-sm:0 0 4px #00ff41,0 0 8px rgba(0,255,65,.3);
-      --mono:'Share Tech Mono',monospace; --vt:'VT323',monospace;
+      --green: #00ff41;
+      --green-dim: #00882a;
+      --green-dk: #003b0f;
+      --green-bg: #020d02;
+      --glow: 0 0 6px #00ff41, 0 0 16px rgba(0, 255, 65, .4);
+      --glow-sm: 0 0 4px #00ff41, 0 0 8px rgba(0, 255, 65, .3);
+      --mono: 'Share Tech Mono', monospace;
+      --vt: 'VT323', monospace;
     }
-    html,body { width:100%;height:100%;overflow:hidden;background:var(--green-bg);color:var(--green);font-family:var(--mono); }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--green-bg);
+      color: var(--green);
+      font-family: var(--mono);
+    }
+
     body::after {
-      content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
-      background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,.10) 3px,rgba(0,0,0,.10) 4px);
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, rgba(0, 0, 0, .10) 3px, rgba(0, 0, 0, .10) 4px);
     }
+
     body::before {
-      content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;
-      background:rgba(0,255,65,.006);animation:flicker .1s infinite;
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      background: rgba(0, 255, 65, .006);
+      animation: flicker .1s infinite;
     }
-    @keyframes flicker { 33%{opacity:.97} 66%{opacity:.99} 0%,100%{opacity:1} }
+
+    @keyframes flicker {
+      33% {
+        opacity: .97
+      }
+
+      66% {
+        opacity: .99
+      }
+
+      0%,
+      100% {
+        opacity: 1
+      }
+    }
 
     /* TOPBAR */
     .os-topbar {
-      height:32px;background:rgba(0,10,0,.95);border-bottom:1px solid var(--green-dk);
-      display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0;
+      height: 32px;
+      background: rgba(0, 10, 0, .95);
+      border-bottom: 1px solid var(--green-dk);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      flex-shrink: 0;
     }
-    .os-title { font-family:var(--vt);font-size:1.1rem;color:var(--green);text-shadow:var(--glow-sm);letter-spacing:.2em; }
-    .os-clock { font-size:.7rem;color:var(--green-dim);letter-spacing:.15em; }
+
+    .os-title {
+      font-family: var(--vt);
+      font-size: 1.1rem;
+      color: var(--green);
+      text-shadow: var(--glow-sm);
+      letter-spacing: .2em;
+    }
+
+    .os-clock {
+      font-size: .7rem;
+      color: var(--green-dim);
+      letter-spacing: .15em;
+    }
 
     /* LAYOUT */
-    .os-body { display:flex;height:calc(100vh - 56px);overflow:hidden; }
+    .os-body {
+      display: flex;
+      height: calc(100vh - 56px);
+      overflow: hidden;
+    }
 
     /* SIDEBAR */
     .os-sidebar {
-      width:190px;flex-shrink:0;background:rgba(0,8,0,.85);
-      border-right:1px solid var(--green-dk);display:flex;flex-direction:column;padding:14px 0;
+      width: 190px;
+      flex-shrink: 0;
+      background: rgba(0, 8, 0, .85);
+      border-right: 1px solid var(--green-dk);
+      display: flex;
+      flex-direction: column;
+      padding: 14px 0;
     }
-    .sidebar-label { font-size:.58rem;color:var(--green-dim);letter-spacing:.3em;padding:0 14px 10px;border-bottom:1px solid var(--green-dk);margin-bottom:6px; }
+
+    .sidebar-label {
+      font-size: .58rem;
+      color: var(--green-dim);
+      letter-spacing: .3em;
+      padding: 0 14px 10px;
+      border-bottom: 1px solid var(--green-dk);
+      margin-bottom: 6px;
+    }
+
     .folder-item {
-      display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;
-      font-size:.8rem;letter-spacing:.06em;color:var(--green-dim);
-      border-left:3px solid transparent;transition:background .15s,color .15s,border-color .15s;user-select:none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      cursor: pointer;
+      font-size: .8rem;
+      letter-spacing: .06em;
+      color: var(--green-dim);
+      border-left: 3px solid transparent;
+      transition: background .15s, color .15s, border-color .15s;
+      user-select: none;
     }
-    .folder-item:hover { background:rgba(0,255,65,.06);color:var(--green); }
-    .folder-item.active { background:rgba(0,255,65,.1);color:var(--green);border-left-color:var(--green);text-shadow:var(--glow-sm); }
-    .folder-icon { font-size:1rem;flex-shrink:0; }
-    .sidebar-divider { height:1px;background:var(--green-dk);margin:10px 14px; }
+
+    .folder-item:hover {
+      background: rgba(0, 255, 65, .06);
+      color: var(--green);
+    }
+
+    .folder-item.active {
+      background: rgba(0, 255, 65, .1);
+      color: var(--green);
+      border-left-color: var(--green);
+      text-shadow: var(--glow-sm);
+    }
+
+    .folder-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--green-dk);
+      margin: 10px 14px;
+    }
+
     .portfolio-btn {
-      display:flex;align-items:center;gap:8px;margin:6px 10px 0;padding:9px 12px;
-      background:rgba(0,255,65,.04);border:1px solid var(--green-dk);border-radius:3px;
-      cursor:pointer;font-family:var(--mono);font-size:.75rem;color:var(--green-dim);
-      letter-spacing:.06em;transition:all .15s;text-decoration:none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 10px 0;
+      padding: 9px 12px;
+      background: rgba(0, 255, 65, .04);
+      border: 1px solid var(--green-dk);
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: .75rem;
+      color: var(--green-dim);
+      letter-spacing: .06em;
+      transition: all .15s;
+      text-decoration: none;
     }
-    .portfolio-btn:hover { background:rgba(0,255,65,.12);border-color:var(--green);color:var(--green);box-shadow:0 0 10px rgba(0,255,65,.2); }
+
+    .portfolio-btn:hover {
+      background: rgba(0, 255, 65, .12);
+      border-color: var(--green);
+      color: var(--green);
+      box-shadow: 0 0 10px rgba(0, 255, 65, .2);
+    }
 
     /* CONTENT */
-    .os-content { flex:1;overflow-y:auto;padding:22px 26px;scrollbar-width:thin;scrollbar-color:var(--green-dk) transparent; }
-    .os-content::-webkit-scrollbar { width:5px; }
-    .os-content::-webkit-scrollbar-thumb { background:var(--green-dk);border-radius:2px; }
+    .os-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 26px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--green-dk) transparent;
+    }
 
-    .panel { display:none;animation:panel-in .25s ease both; }
-    .panel.active { display:block; }
-    @keyframes panel-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .os-content::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .os-content::-webkit-scrollbar-thumb {
+      background: var(--green-dk);
+      border-radius: 2px;
+    }
+
+    .panel {
+      display: none;
+      animation: panel-in .25s ease both;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
 
     .panel-header {
-      display:flex;align-items:center;gap:12px;margin-bottom:20px;
-      padding-bottom:10px;border-bottom:1px solid var(--green-dk);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--green-dk);
     }
-    .panel-header h2 { font-family:var(--vt);font-size:1.7rem;color:var(--green);text-shadow:var(--glow);letter-spacing:.1em; }
-    .ph-icon { font-size:1.5rem; }
+
+    .panel-header h2 {
+      font-family: var(--vt);
+      font-size: 1.7rem;
+      color: var(--green);
+      text-shadow: var(--glow);
+      letter-spacing: .1em;
+    }
+
+    .ph-icon {
+      font-size: 1.5rem;
+    }
 
     /* DESKTOP */
-    .desktop-grid { display:grid;grid-template-columns:repeat(auto-fill,85px);gap:18px;padding:8px; }
-    .desktop-icon {
-      display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;
-      border:1px solid transparent;border-radius:3px;cursor:pointer;
-      transition:background .15s,border-color .15s;text-align:center;user-select:none;
+    .desktop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 85px);
+      gap: 18px;
+      padding: 8px;
     }
-    .desktop-icon:hover { background:rgba(0,255,65,.08);border-color:var(--green-dk); }
-    .di-emoji { font-size:1.8rem;line-height:1; }
-    .di-label { font-size:.62rem;color:var(--green);letter-spacing:.05em;line-height:1.2;text-shadow:var(--glow-sm); }
+
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 6px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+      text-align: center;
+      user-select: none;
+    }
+
+    .desktop-icon:hover {
+      background: rgba(0, 255, 65, .08);
+      border-color: var(--green-dk);
+    }
+
+    .di-emoji {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    .di-label {
+      font-size: .62rem;
+      color: var(--green);
+      letter-spacing: .05em;
+      line-height: 1.2;
+      text-shadow: var(--glow-sm);
+    }
 
     /* CV */
-    .cv-embed { width:100%;height:calc(100vh - 150px);border:1px solid var(--green-dk);border-radius:3px;background:#000; }
+    .cv-embed {
+      width: 100%;
+      height: calc(100vh - 150px);
+      border: 1px solid var(--green-dk);
+      border-radius: 3px;
+      background: #000;
+    }
+
     .cv-fallback {
-      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
-      height:280px;border:1px dashed var(--green-dk);border-radius:3px;
-      color:var(--green-dim);font-size:.78rem;letter-spacing:.1em;text-align:center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      height: 280px;
+      border: 1px dashed var(--green-dk);
+      border-radius: 3px;
+      color: var(--green-dim);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-align: center;
     }
-    .cf-icon { font-size:2.8rem; }
+
+    .cf-icon {
+      font-size: 2.8rem;
+    }
+
     .cv-open-btn {
-      display:inline-flex;align-items:center;gap:8px;padding:7px 18px;
-      background:none;border:1px solid var(--green-dk);color:var(--green-dim);
-      font-family:var(--mono);font-size:.76rem;letter-spacing:.12em;
-      cursor:pointer;border-radius:2px;transition:all .15s;text-decoration:none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      background: none;
+      border: 1px solid var(--green-dk);
+      color: var(--green-dim);
+      font-family: var(--mono);
+      font-size: .76rem;
+      letter-spacing: .12em;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all .15s;
+      text-decoration: none;
     }
-    .cv-open-btn:hover { border-color:var(--green);color:var(--green);background:rgba(0,255,65,.06);box-shadow:0 0 10px rgba(0,255,65,.2); }
+
+    .cv-open-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(0, 255, 65, .06);
+      box-shadow: 0 0 10px rgba(0, 255, 65, .2);
+    }
 
     /* SKILLS */
-    .skills-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:11px; }
-    .skill-row {
-      display:flex;flex-direction:column;gap:5px;padding:11px 13px;
-      border:1px solid var(--green-dk);border-radius:3px;background:rgba(0,255,65,.02);
-      transition:background .15s,border-color .15s;
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 11px;
     }
-    .skill-row:hover { background:rgba(0,255,65,.06);border-color:var(--green); }
-    .sk-name { font-size:.78rem;color:var(--green);letter-spacing:.08em; }
-    .sk-bar-wrap { height:3px;background:#001500;border-radius:2px;overflow:hidden; }
-    .sk-bar { height:100%;background:var(--green);box-shadow:var(--glow-sm);border-radius:2px;width:0%;transition:width 1s ease .1s; }
-    .sk-level { font-size:.58rem;color:var(--green-dim);letter-spacing:.1em;text-align:right; }
+
+    .skill-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 11px 13px;
+      border: 1px solid var(--green-dk);
+      border-radius: 3px;
+      background: rgba(0, 255, 65, .02);
+      transition: background .15s, border-color .15s;
+    }
+
+    .skill-row:hover {
+      background: rgba(0, 255, 65, .06);
+      border-color: var(--green);
+    }
+
+    .sk-name {
+      font-size: .78rem;
+      color: var(--green);
+      letter-spacing: .08em;
+    }
+
+    .sk-bar-wrap {
+      height: 3px;
+      background: #001500;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .sk-bar {
+      height: 100%;
+      background: var(--green);
+      box-shadow: var(--glow-sm);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 1s ease .1s;
+    }
+
+    .sk-level {
+      font-size: .58rem;
+      color: var(--green-dim);
+      letter-spacing: .1em;
+      text-align: right;
+    }
 
     /* ABOUT */
-    .about-crt { display:flex;gap:26px;flex-wrap:wrap; }
-    .about-photo-wrap { flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:8px; }
-    .about-photo {
-      width:140px;height:140px;object-fit:cover;border-radius:3px;
-      border:2px solid var(--green-dk);box-shadow:0 0 14px rgba(0,255,65,.12);
-      filter:saturate(.7) brightness(.9);transition:filter .3s;
+    .about-crt {
+      display: flex;
+      gap: 26px;
+      flex-wrap: wrap;
     }
-    .about-photo:hover { filter:saturate(1) brightness(1); }
-    .about-photo-label { font-family:var(--vt);font-size:.85rem;color:var(--green-dim);letter-spacing:.15em; }
-    .about-text { flex:1;min-width:200px; }
-    .about-text p { font-size:.8rem;color:#aaddaa;line-height:1.8;margin-bottom:12px;letter-spacing:.03em; }
-    .about-tags { display:flex;flex-wrap:wrap;gap:6px;margin-top:4px; }
-    .tag { padding:2px 9px;border:1px solid var(--green-dk);border-radius:2px;font-size:.62rem;color:var(--green-dim);letter-spacing:.1em;background:rgba(0,255,65,.03); }
-    .prompt { font-size:.75rem;color:var(--green-dim);letter-spacing:.05em;margin-top:14px; }
-    .cursor { display:inline-block;width:7px;height:13px;background:var(--green);vertical-align:middle;animation:cur-blink .8s step-end infinite; }
-    @keyframes cur-blink { 50%{opacity:0} }
+
+    .about-photo-wrap {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .about-photo {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 3px;
+      border: 2px solid var(--green-dk);
+      box-shadow: 0 0 14px rgba(0, 255, 65, .12);
+      filter: saturate(.7) brightness(.9);
+      transition: filter .3s;
+    }
+
+    .about-photo:hover {
+      filter: saturate(1) brightness(1);
+    }
+
+    .about-photo-label {
+      font-family: var(--vt);
+      font-size: .85rem;
+      color: var(--green-dim);
+      letter-spacing: .15em;
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .about-text p {
+      font-size: .8rem;
+      color: #aaddaa;
+      line-height: 1.8;
+      margin-bottom: 12px;
+      letter-spacing: .03em;
+    }
+
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      padding: 2px 9px;
+      border: 1px solid var(--green-dk);
+      border-radius: 2px;
+      font-size: .62rem;
+      color: var(--green-dim);
+      letter-spacing: .1em;
+      background: rgba(0, 255, 65, .03);
+    }
+
+    .prompt {
+      font-size: .75rem;
+      color: var(--green-dim);
+      letter-spacing: .05em;
+      margin-top: 14px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 13px;
+      background: var(--green);
+      vertical-align: middle;
+      animation: cur-blink .8s step-end infinite;
+    }
+
+    @keyframes cur-blink {
+      50% {
+        opacity: 0
+      }
+    }
 
     /* STATUSBAR */
     .os-statusbar {
-      height:24px;background:rgba(0,8,0,.9);border-top:1px solid var(--green-dk);
-      display:flex;align-items:center;padding:0 14px;gap:18px;flex-shrink:0;
+      height: 24px;
+      background: rgba(0, 8, 0, .9);
+      border-top: 1px solid var(--green-dk);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 18px;
+      flex-shrink: 0;
     }
-    .sb-item { font-size:.58rem;color:var(--green-dim);letter-spacing:.12em; }
-    .sb-dot { display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:var(--glow-sm);margin-right:4px;animation:dot-pulse 2s ease-in-out infinite; }
-    @keyframes dot-pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .sb-item {
+      font-size: .58rem;
+      color: var(--green-dim);
+      letter-spacing: .12em;
+    }
+
+    .sb-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: var(--glow-sm);
+      margin-right: 4px;
+      animation: dot-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dot-pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <div class="os-topbar">
@@ -152,10 +531,14 @@
   <div class="os-body">
     <div class="os-sidebar">
       <div class="sidebar-label">EXPLORADOR</div>
-      <div class="folder-item active" onclick="showPanel('home')" id="tab-home"><span class="folder-icon">🖥</span><span>Inicio</span></div>
-      <div class="folder-item" onclick="showPanel('cv')" id="tab-cv"><span class="folder-icon">📄</span><span>CV</span></div>
-      <div class="folder-item" onclick="showPanel('skills')" id="tab-skills"><span class="folder-icon">⚙</span><span>Skills</span></div>
-      <div class="folder-item" onclick="showPanel('about')" id="tab-about"><span class="folder-icon">👤</span><span>Sobre mí</span></div>
+      <div class="folder-item active" onclick="showPanel('home')" id="tab-home"><span
+          class="folder-icon">🖥</span><span>Inicio</span></div>
+      <div class="folder-item" onclick="showPanel('cv')" id="tab-cv"><span class="folder-icon">📄</span><span>CV</span>
+      </div>
+      <div class="folder-item" onclick="showPanel('skills')" id="tab-skills"><span
+          class="folder-icon">⚙</span><span>Skills</span></div>
+      <div class="folder-item" onclick="showPanel('about')" id="tab-about"><span
+          class="folder-icon">👤</span><span>Sobre mí</span></div>
       <div class="sidebar-divider"></div>
       <a class="portfolio-btn" href="./portfolio.html" target="_parent">
         <span>◈</span><span>Portfolio Web →</span>
@@ -166,25 +549,34 @@
 
       <!-- INICIO -->
       <div class="panel active" id="panel-home">
-        <div class="panel-header"><span class="ph-icon">🖥</span><h2>ESCRITORIO</h2></div>
+        <div class="panel-header"><span class="ph-icon">🖥</span>
+          <h2>ESCRITORIO</h2>
+        </div>
         <div class="desktop-grid">
           <div class="desktop-icon" ondblclick="showPanel('cv')">
-            <div class="di-emoji">📄</div><div class="di-label">CV.pdf</div>
+            <div class="di-emoji">📄</div>
+            <div class="di-label">CV.pdf</div>
           </div>
           <div class="desktop-icon" ondblclick="showPanel('skills')">
-            <div class="di-emoji">⚙</div><div class="di-label">Skills</div>
+            <div class="di-emoji">⚙</div>
+            <div class="di-label">Skills</div>
           </div>
           <div class="desktop-icon" ondblclick="showPanel('about')">
-            <div class="di-emoji">👤</div><div class="di-label">Sobre mí</div>
+            <div class="di-emoji">👤</div>
+            <div class="di-label">Sobre mí</div>
           </div>
           <div class="desktop-icon" ondblclick="window.open('https://www.artstation.com/jdxth','_blank')">
-            <div class="di-emoji">◎</div><div class="di-label">ArtStation</div>
+            <div class="di-emoji">◎</div>
+            <div class="di-label">ArtStation</div>
           </div>
-          <div class="desktop-icon" ondblclick="window.open('https://www.linkedin.com/in/judith-nav%C3%B3-mart%C3%ADnez-73185b385/','_blank')">
-            <div class="di-emoji">▣</div><div class="di-label">LinkedIn</div>
+          <div class="desktop-icon"
+            ondblclick="window.open('https://www.linkedin.com/in/judith-nav%C3%B3-mart%C3%ADnez-73185b385/','_blank')">
+            <div class="di-emoji">▣</div>
+            <div class="di-label">LinkedIn</div>
           </div>
           <div class="desktop-icon" ondblclick="window.location.href='mailto:jnavomartinez@gmail.com'">
-            <div class="di-emoji">✉</div><div class="di-label">Gmail</div>
+            <div class="di-emoji">✉</div>
+            <div class="di-label">Gmail</div>
           </div>
         </div>
         <div class="prompt" style="margin-top:28px">C:\JNAVO&gt; <span class="cursor"></span></div>
@@ -192,31 +584,44 @@
 
       <!-- CV -->
       <div class="panel" id="panel-cv">
-        <div class="panel-header"><span class="ph-icon">📄</span><h2>CURRICULUM VITAE</h2></div>
-        <div class="cv-fallback" id="cv-fallback">
-          <div class="cf-icon">📄</div>
-          <div>Pon tu CV como <strong style="color:#00882a">cv.pdf</strong> en la carpeta del proyecto</div>
-          <a class="cv-open-btn" href="./cv.pdf" target="_blank">↗ ABRIR CV.PDF</a>
+        <div class="panel-header"><span class="ph-icon">📄</span>
+          <h2>CURRICULUM VITAE</h2>
+        </div>
+        <div style="text-align:center">
+          <img src="./cv.png" alt="CV Judith Navó" style="
+        max-width:100%;
+        max-height:calc(100vh - 160px);
+        object-fit:contain;
+        border:1px solid var(--green-dk);
+        border-radius:3px;
+        box-shadow:0 0 20px rgba(0,255,65,.1);
+      " />
         </div>
       </div>
 
       <!-- SKILLS -->
       <div class="panel" id="panel-skills">
-        <div class="panel-header"><span class="ph-icon">⚙</span><h2>SKILLS</h2></div>
+        <div class="panel-header"><span class="ph-icon">⚙</span>
+          <h2>SKILLS</h2>
+        </div>
         <div class="skills-grid" id="skills-grid"></div>
       </div>
 
       <!-- SOBRE MÍ -->
       <div class="panel" id="panel-about">
-        <div class="panel-header"><span class="ph-icon">👤</span><h2>SOBRE MÍ</h2></div>
+        <div class="panel-header"><span class="ph-icon">👤</span>
+          <h2>SOBRE MÍ</h2>
+        </div>
         <div class="about-crt">
           <div class="about-photo-wrap">
-            <img class="about-photo" src="./src/about.jpg" alt="Judith Navó" onerror="this.style.display='none'"/>
+            <img class="about-photo" src="./src/about.jpg" alt="Judith Navó" onerror="this.style.display='none'" />
             <div class="about-photo-label">JUDITH_NAVÓ.jpg</div>
           </div>
           <div class="about-text">
-            <p>Soy una artista 3D y creadora visual con experiencia en modelado, iluminación y animación en Blender. Me gusta cuidar cada detalle del proceso creativo, desde el diseño hasta la presentación final.</p>
-            <p>Disfruto trabajando en equipo y aprendiendo nuevas técnicas que me ayuden a seguir mejorando como profesional en el mundo de los videojuegos y las experiencias interactivas.</p>
+            <p>Soy una artista 3D y creadora visual con experiencia en modelado, iluminación y animación en Blender. Me
+              gusta cuidar cada detalle del proceso creativo, desde el diseño hasta la presentación final.</p>
+            <p>Disfruto trabajando en equipo y aprendiendo nuevas técnicas que me ayuden a seguir mejorando como
+              profesional en el mundo de los videojuegos y las experiencias interactivas.</p>
             <div class="about-tags">
               <span class="tag">3D ARTIST</span>
               <span class="tag">ANIMATION</span>
@@ -242,21 +647,21 @@
     // Clock
     function updateClock() {
       const d = new Date();
-      const pad = n => String(n).padStart(2,'0');
-      document.getElementById('os-clock').textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('os-clock').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
     }
     updateClock(); setInterval(updateClock, 1000);
 
     // Skills
     const SKILLS = [
-      { name:'Blender',       level:85, label:'AVANZADO'   },
-      { name:'Krita',         level:70, label:'INTERMEDIO' },
-      { name:'Photoshop',     level:65, label:'INTERMEDIO' },
-      { name:'Illustrator',   level:60, label:'INTERMEDIO' },
-      { name:'After Effects', level:55, label:'BÁSICO+'    },
-      { name:'Premiere',      level:60, label:'INTERMEDIO' },
-      { name:'Unity',         level:50, label:'BÁSICO'     },
-      { name:'Canva',         level:80, label:'AVANZADO'   },
+      { name: 'Blender', level: 85, label: 'AVANZADO' },
+      { name: 'Krita', level: 70, label: 'INTERMEDIO' },
+      { name: 'Photoshop', level: 65, label: 'INTERMEDIO' },
+      { name: 'Illustrator', level: 60, label: 'INTERMEDIO' },
+      { name: 'After Effects', level: 55, label: 'BÁSICO+' },
+      { name: 'Premiere', level: 60, label: 'INTERMEDIO' },
+      { name: 'Unity', level: 50, label: 'BÁSICO' },
+      { name: 'Canva', level: 80, label: 'AVANZADO' },
     ];
     document.getElementById('skills-grid').innerHTML = SKILLS.map(s =>
       `<div class="skill-row">
@@ -267,13 +672,13 @@
     ).join('');
 
     // Paths
-    const PATHS = { home:'C:\\JNAVO\\INICIO', cv:'C:\\JNAVO\\CV', skills:'C:\\JNAVO\\SKILLS', about:'C:\\JNAVO\\SOBRE_MI' };
+    const PATHS = { home: 'C:\\JNAVO\\INICIO', cv: 'C:\\JNAVO\\CV', skills: 'C:\\JNAVO\\SKILLS', about: 'C:\\JNAVO\\SOBRE_MI' };
 
     function showPanel(id) {
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.getElementById('panel-'+id).classList.add('active');
+      document.getElementById('panel-' + id).classList.add('active');
       document.querySelectorAll('.folder-item').forEach(t => t.classList.remove('active'));
-      const tab = document.getElementById('tab-'+id);
+      const tab = document.getElementById('tab-' + id);
       if (tab) tab.classList.add('active');
       document.getElementById('sb-path').textContent = PATHS[id] || 'C:\\JNAVO';
       if (id === 'skills') {
@@ -283,17 +688,8 @@
       }
     }
 
-    // CV: comprueba si existe el PDF
-    fetch('./cv.pdf', { method:'HEAD' })
-      .then(r => {
-        if (r.ok) {
-          document.getElementById('cv-fallback').style.display = 'none';
-          const iframe = document.createElement('iframe');
-          iframe.className = 'cv-embed';
-          iframe.src = './cv.pdf';
-          document.getElementById('panel-cv').appendChild(iframe);
-        }
-      }).catch(()=>{});
+
   </script>
 </body>
+
 </html>

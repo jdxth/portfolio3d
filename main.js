@@ -21,6 +21,7 @@ const CFG = {
 
   tooltips: {
     Pantalla01: { icon: '◈', label: '[ OPEN PORTFOLIO ]',  sub: 'judith-navo.portfolio'       },
+    Pantalla02: { icon: '🖥', label: '[ OPEN FILES ]',      sub: 'JNAVO_OS v1.0'               },
     artstation: { icon: '◎', label: '[ OPEN ARTSTATION ]', sub: 'artstation.com/jdxth'        },
     linkedin:   { icon: '▣', label: '[ OPEN LINKEDIN ]',   sub: 'linkedin.com/in/judith-navó' },
     gmail:      { icon: '✉', label: '[ SEND EMAIL ]',      sub: 'jnavomartinez@gmail.com'     },
@@ -28,7 +29,7 @@ const CFG = {
 
   camStart:  { x: 4,     y: 4,    z: 4     },
   camLookAt: { x: -1.3,  y: 1.35, z: -0.4  },
-  zoomPos:   { x: 0, y: 1.46, z: -0  },
+  zoomPos:   { x: 0,     y: 1.46, z: 0     },
   zoomLook:  { x: -1.55, y: 1.41, z: -0.47 },
 };
 
@@ -87,16 +88,13 @@ const deskLight = new THREE.PointLight(0xffcc66, 0.7, 2.2);
 deskLight.position.set(-1.2, 1.65, 0.45);
 scene.add(deskLight);
 
-// Luz general más potente
 const ambientLight2 = new THREE.AmbientLight(0xffffff, 0.2);
 scene.add(ambientLight2);
 
-// Luz desde arriba (techo)
 const ceilingLight = new THREE.DirectionalLight(0xffffff, 0.5);
 ceilingLight.position.set(0, 5, 0);
 scene.add(ceilingLight);
 
-// Luz frontal para iluminar la habitación de frente
 const frontLight = new THREE.DirectionalLight(0xfff0e0, 0.4);
 frontLight.position.set(0, 2, 5);
 scene.add(frontLight);
@@ -110,7 +108,7 @@ const allInteractable = [];
 let isZoomed    = false;
 let isAnimating = false;
 let hoveredMesh = null;
-let controls    = null;   // ← declarado aquí antes de todo
+let controls    = null;
 
 const savedCamPos = new THREE.Vector3();
 const mouse    = new THREE.Vector2(-999, -999);
@@ -118,7 +116,7 @@ const raycaster = new THREE.Raycaster();
 const clock    = new THREE.Clock();
 
 /* ════════════════════════════════════════════════════
-   ORBIT CONTROLS — se llama después de cargar el script
+   ORBIT CONTROLS
 ════════════════════════════════════════════════════ */
 function initControls() {
   controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -160,6 +158,7 @@ function onLoaded(gltf) {
 
     const name = child.name;
 
+    // Pantalla01 — portfolio iframe
     if (name === CFG.screen1) {
       screen1Mesh = child;
       if (child.isMesh) applyScreenMaterial(child, 0x003a00, 0.6);
@@ -167,12 +166,15 @@ function onLoaded(gltf) {
       console.log('✅ Pantalla01 añadida');
     }
 
+    // Pantalla02 — filesystem
     if (name === 'Pantalla02') {
       screen2Mesh = child;
-      if (child.isMesh) applyScreenMaterial(child, 0x000000, 0.0);
-      console.log('📴 Pantalla02 apagada');
+      if (child.isMesh) applyScreenMaterial(child, 0x002200, 0.4);
+      allInteractable.push(child);
+      console.log('✅ Pantalla02 añadida');
     }
 
+    // Links
     const linkKey = Object.entries(CFG.links).find(([, v]) => v === name)?.[0];
     if (linkKey) {
       linkMeshes[linkKey] = child;
@@ -231,7 +233,10 @@ window.addEventListener('mousemove', e => {
 
 window.addEventListener('click', onSceneClick);
 window.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && isZoomed) closeMonitor();
+  if (e.key === 'Escape' && isZoomed) {
+    closeMonitor();
+    closeFilesystem();
+  }
 });
 
 function onSceneClick() {
@@ -246,11 +251,19 @@ function onSceneClick() {
   const linkKey = mesh.userData.linkKey
     || Object.entries(CFG.links).find(([, v]) => v === name)?.[0];
 
+  // Pantalla01 → zoom + portfolio iframe
   if (name === CFG.screen1 && !isZoomed) {
     zoomToMonitor();
     return;
   }
 
+  // Pantalla02 → zoom + filesystem
+  if (name === 'Pantalla02' && !isZoomed) {
+    zoomToScreen2();
+    return;
+  }
+
+  // Links directos
   if (linkKey) {
     const url = CFG.urls[linkKey];
     if (url.startsWith('mailto:')) {
@@ -308,7 +321,7 @@ function clearHover() {
 }
 
 /* ════════════════════════════════════════════════════
-   ZOOM AL MONITOR
+   ZOOM — PANTALLA 01 (portfolio)
 ════════════════════════════════════════════════════ */
 function zoomToMonitor() {
   if (isAnimating) return;
@@ -331,6 +344,31 @@ function zoomToMonitor() {
   });
 }
 
+/* ════════════════════════════════════════════════════
+   ZOOM — PANTALLA 02 (filesystem)
+════════════════════════════════════════════════════ */
+function zoomToScreen2() {
+  if (isAnimating) return;
+  isAnimating = isZoomed = true;
+  if (controls) controls.enabled = false;
+  savedCamPos.copy(camera.position);
+  hintEl.style.opacity = '0';
+  clearHover();
+
+  const lp = { x: CFG.camLookAt.x, y: CFG.camLookAt.y, z: CFG.camLookAt.z };
+  gsap.to(lp, {
+    x: -1.55, y: 1.41, z: -0.845,
+    duration: 1.5, ease: 'power3.inOut',
+    onUpdate() { camera.lookAt(lp.x, lp.y, lp.z); }
+  });
+  gsap.to(camera.position, {
+    x: CFG.zoomPos.x, y: CFG.zoomPos.y, z: CFG.zoomPos.z,  // ← misma posición que Pantalla01
+    duration: 1.5, ease: 'power3.inOut',
+    onComplete() { isAnimating = false; openFilesystem(); }
+  });
+}
+
+/* ── Zoom out (compartido) ────────────────────────── */
 function zoomOut() {
   if (isAnimating) return;
   isAnimating = true;
@@ -356,8 +394,42 @@ function zoomOut() {
   });
 }
 
+/* ── Overlays ─────────────────────────────────────── */
 function openMonitor()  { monOverlay.classList.add('active'); }
 window.closeMonitor = function () { monOverlay.classList.remove('active'); zoomOut(); };
+
+function openFilesystem()  { document.getElementById('filesystem-overlay').classList.add('active'); }
+window.closeFilesystem = function () { document.getElementById('filesystem-overlay').classList.remove('active'); zoomOut(); };
+
+/* ════════════════════════════════════════════════════
+   TOGGLE LUCES
+════════════════════════════════════════════════════ */
+let lightsOn = true;
+
+function toggleLights() {
+  lightsOn = !lightsOn;
+
+  const btn   = document.getElementById('light-btn');
+  const icon  = document.getElementById('light-icon');
+  const label = document.getElementById('light-label');
+
+  gsap.to(keyLight,    { intensity: lightsOn ? 0.9 : 0,   duration: 0.6 });
+  gsap.to(fillLight,   { intensity: lightsOn ? 0.3 : 0,   duration: 0.6 });
+  gsap.to(deskLight,   { intensity: lightsOn ? 0.7 : 0,   duration: 0.6 });
+  gsap.to(monitorGlow, { intensity: lightsOn ? 0.5 : 0,   duration: 0.6 });
+  gsap.to(ceilingLight,{ intensity: lightsOn ? 0.5 : 0,   duration: 0.6 });
+  gsap.to(frontLight,  { intensity: lightsOn ? 0.4 : 0,   duration: 0.6 });
+
+  scene.traverse(child => {
+    if (child.isAmbientLight) {
+      gsap.to(child, { intensity: lightsOn ? 0.55 : 0.04, duration: 0.8 });
+    }
+  });
+
+  btn.classList.toggle('off', !lightsOn);
+  icon.textContent  = lightsOn ? '💡' : '🌑';
+  label.textContent = lightsOn ? 'LIGHTS ON' : 'LIGHTS OFF';
+}
 
 /* ════════════════════════════════════════════════════
    RENDER LOOP
@@ -372,10 +444,7 @@ function pulseGlow(dt) {
 function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
-
-  // OrbitControls maneja la cámara — NO hay idleSway
   if (controls) controls.update();
-
   updateHover();
   pulseGlow(dt);
   renderer.render(scene, camera);
@@ -386,43 +455,6 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
-/* ── TOGGLE LUCES ─────────────────────────────────── */
-let lightsOn = true;
-
-function toggleLights() {
-  lightsOn = !lightsOn;
-
-  const btn   = document.getElementById('light-btn');
-  const icon  = document.getElementById('light-icon');
-  const label = document.getElementById('light-label');
-
-  // Todas las luces de la escena
-  const intensity = lightsOn ? 1 : 0;
-
-  gsap.to(keyLight,     { intensity: lightsOn ? 0.9 : 0, duration: 0.6 });
-  gsap.to(fillLight,    { intensity: lightsOn ? 0.3 : 0, duration: 0.6 });
-  gsap.to(deskLight,    { intensity: lightsOn ? 0.7 : 0, duration: 0.6 });
-  gsap.to(monitorGlow,  { intensity: lightsOn ? 0.5 : 0, duration: 0.6 });
-
-  // Ambient más suave para no dejar todo negro del todo
-  scene.traverse(child => {
-    if (child.isAmbientLight) {
-      gsap.to(child, { intensity: lightsOn ? 0.55 : 0.04, duration: 0.8 });
-    }
-    // Si añadiste más luces también las apaga
-    if (child.isDirectionalLight || child.isPointLight) {
-      if (child !== keyLight && child !== fillLight && child !== deskLight && child !== monitorGlow) {
-        gsap.to(child, { intensity: lightsOn ? child.userData.baseIntensity || 0.5 : 0, duration: 0.6 });
-      }
-    }
-  });
-
-  // UI
-  btn.classList.toggle('off', !lightsOn);
-  icon.textContent  = lightsOn ? '💡' : '🌑';
-  label.textContent = lightsOn ? 'LIGHTS ON' : 'LIGHTS OFF';
-}
 
 /* ── Init ─────────────────────────────────────────── */
 (function init() {
@@ -435,9 +467,9 @@ function toggleLights() {
   s1.onload = () => {
     document.head.appendChild(s2);
     s2.onload = () => {
-      initControls(); // ← primero controls
-      loadModel();    // ← luego modelo
-      animate();      // ← luego render loop
+      initControls();
+      loadModel();
+      animate();
     };
     s2.onerror = () => console.error('Error cargando OrbitControls');
   };
